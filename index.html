@@ -1,0 +1,824 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instituto para Sordos Santa Rosa, Inc. - Actividades Matemáticas</title>
+    <style>
+        :root {
+            --primary: #3f51b5;
+            --secondary: #f50057;
+            --accent: #00bcd4;
+            --light: #f5f5f5;
+            --dark: #212121;
+            --success: #4caf50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: var(--dark);
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding-bottom: 0; /* Eliminado padding fijo */
+        }
+
+        /* Animaciones globales */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes floatElement {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 0.1;
+            }
+            25% {
+                transform: translate(20px, -15px) rotate(5deg);
+                opacity: 0.15;
+            }
+            50% {
+                transform: translate(-15px, 10px) rotate(-5deg);
+                opacity: 0.12;
+            }
+            75% {
+                transform: translate(10px, 20px) rotate(3deg);
+                opacity: 0.15;
+            }
+        }
+
+        @keyframes fadeInRight {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 1;
+            }
+            20% {
+                transform: scale(25, 25);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(50, 50);
+                opacity: 0;
+            }
+        }
+
+        /* Animación lenta para desaparecer (15 segundos) - SUAVE */
+        @keyframes fadeOutSlow {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(5px) scale(0.98); /* Más sutil */
+            }
+        }
+
+        /* Animación lenta para aparecer (15 segundos) */
+        @keyframes fadeInSlow {
+            0% {
+                opacity: 0;
+                transform: translateY(5px) scale(0.98);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Elementos flotantes de fondo */
+        .floating-element {
+            position: fixed;
+            font-size: 2.5rem;
+            opacity: 0.1;
+            z-index: -1;
+            pointer-events: none;
+            animation: floatElement 18s infinite ease-in-out;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 0.8rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            position: relative;
+            gap: 1rem;
+        }
+
+        .child-figure {
+            font-size: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: none;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.3rem;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Barra de búsqueda en el borde inferior derecho del header */
+        .search-container {
+            position: absolute;
+            bottom: 0;
+            right: 10rem; /* Desplazado hacia la izquierda */
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.5); /* Más transparente y sutil */
+            border-radius: 20px;
+            padding: 0.4rem 0.6rem;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Borde más sutil */
+            width: 150px;
+            min-height: 32px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); /* Sombra más ligera */
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: var(--dark);
+            padding: 0.3rem 0.2rem;
+            font-size: 0.85rem;
+            outline: none;
+            width: 100%;
+        }
+
+        .search-box input::placeholder {
+            color: rgba(0, 0, 0, 0.5);
+            font-size: 0.85rem;
+        }
+
+        .search-icon {
+            margin-right: 0.3rem;
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 1rem auto;
+            gap: 2rem;
+            padding: 0 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sidebar {
+            flex: 0 0 250px;
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            height: 75vh;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .categories {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .categories h2 {
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            color: var(--primary);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light);
+            text-align: center;
+        }
+
+        .category-list-container {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .category-list-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .category-list-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .category-list-container::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .category-list-container::-webkit-scrollbar-thumb:hover {
+            background: #303f9f;
+        }
+
+        .category-list {
+            list-style: none;
+        }
+
+        .category-item {
+            margin-bottom: 0.3rem;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: fadeInRight 0.6s ease forwards;
+        }
+
+        .category-item:nth-child(1) { animation-delay: 0.1s; }
+        .category-item:nth-child(2) { animation-delay: 0.2s; }
+        .category-item:nth-child(3) { animation-delay: 0.3s; }
+        .category-item:nth-child(4) { animation-delay: 0.4s; }
+        .category-item:nth-child(5) { animation-delay: 0.5s; }
+        .category-item:nth-child(6) { animation-delay: 0.6s; }
+        .category-item:nth-child(7) { animation-delay: 0.7s; }
+        .category-item:nth-child(8) { animation-delay: 0.8s; }
+        .category-item:nth-child(9) { animation-delay: 0.9s; }
+        .category-item:nth-child(10) { animation-delay: 1.0s; }
+
+        .category-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.5rem 0.7rem;
+            background: var(--light);
+            border: none;
+            border-radius: 6px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            font-size: 0.8rem;
+        }
+
+        .category-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .category-btn:hover::before {
+            left: 100%;
+        }
+
+        .category-btn:hover {
+            background: #e0e0e0;
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .category-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .math-symbol {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .math-z { color: #FF5722; }
+        .math-r { color: #2196F3; }
+        .math-algebra { color: #E91E63; }
+        .math-geometry { color: #4CAF50; }
+        .math-conics { color: #8E24AA; }
+        .math-calc { color: #FF9800; }
+
+        .main-content {
+            flex: 1;
+        }
+
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+            perspective: 1000px;
+        }
+
+        .activity-card:nth-child(1) { animation-delay: 0.1s; }
+        .activity-card:nth-child(2) { animation-delay: 0.2s; }
+        .activity-card:nth-child(3) { animation-delay: 0.3s; }
+        .activity-card:nth-child(4) { animation-delay: 0.4s; }
+        .activity-card:nth-child(5) { animation-delay: 0.5s; }
+        .activity-card:nth-child(6) { animation-delay: 0.6s; }
+        .activity-card:nth-child(7) { animation-delay: 0.7s; }
+
+        .card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .activity-card:hover .card-inner {
+            transform: rotateY(5deg) rotateX(5deg);
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            padding: 1.2rem;
+            background: var(--primary);
+            color: white;
+            position: relative;
+        }
+
+        .new-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--secondary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            animation: pulse 2s infinite;
+        }
+
+        .card-body {
+            padding: 1.2rem;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 2px;
+        }
+
+        .card-footer {
+            padding: 1rem 1.2rem;
+            background: var(--light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .open-btn {
+            padding: 0.4rem 0.8rem;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 0.8rem;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .open-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        .open-btn:hover::after {
+            animation: ripple 1s ease-out;
+        }
+
+        .open-btn:hover {
+            background: #c51162;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .open-btn:active {
+            transform: scale(0.95);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.2rem 1rem;
+            background: var(--dark);
+            color: white;
+            /* position: fixed; ← ELIMINADO */
+            width: 100%;
+            z-index: 1;
+            box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+            font-size: 0.9rem;
+            margin-top: 3rem; /* Para que quede después del contenido */
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .empty-state p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-content {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .category-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                flex: 1;
+                width: 100%;
+                height: auto;
+                margin-bottom: 1rem;
+            }
+            
+            .category-list-container {
+                overflow-y: visible;
+                max-height: none;
+            }
+            
+            .activities-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .floating-element {
+                display: none;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .child-figure {
+                font-size: 2rem;
+            }
+            
+            .logo-icon {
+                font-size: 1.8rem;
+            }
+            
+            .search-container {
+                position: relative;
+                bottom: auto;
+                right: auto;
+                transform: none;
+                margin: 1rem auto;
+                display: block;
+            }
+            
+            footer {
+                position: relative;
+                margin-top: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Elementos matemáticos flotantes en el fondo -->
+    <div class="floating-element" style="top: 10%; left: 5%; animation-delay: 0s;">📐</div>
+    <div class="floating-element" style="top: 20%; right: 8%; animation-delay: 2s;">📏</div>
+    <div class="floating-element" style="top: 30%; left: 12%; animation-delay: 4s;">🔺</div>
+    <div class="floating-element" style="top: 40%; right: 15%; animation-delay: 6s;">🔷</div>
+    <div class="floating-element" style="top: 50%; left: 7%; animation-delay: 8s;">⭕</div>
+    <div class="floating-element" style="top: 60%; right: 5%; animation-delay: 10s;">📊</div>
+    <div class="floating-element" style="top: 70%; left: 15%; animation-delay: 12s;">🧮</div>
+    <div class="floating-element" style="top: 80%; right: 12%; animation-delay: 14s;">✏️</div>
+    <div class="floating-element" style="top: 25%; left: 25%; animation-delay: 1s;">👐</div>
+    <div class="floating-element" style="top: 45%; right: 25%; animation-delay: 3s;">👐</div>
+    <div class="floating-element" style="top: 65%; left: 35%; animation-delay: 5s;">👐</div>
+    <div class="floating-element" style="top: 35%; right: 35%; animation-delay: 7s;">👐</div>
+    <div class="floating-element" style="top: 55%; left: 45%; animation-delay: 9s;">👐</div>
+    <div class="floating-element" style="top: 75%; right: 45%; animation-delay: 11s;">👐</div>
+    
+    <header>
+        <div class="header-content">
+            <div class="child-figure" id="left-child">
+                <div>👦</div>
+            </div>
+            
+            <div class="logo">
+                <span class="logo-icon">👐</span>
+                <h1>Manos que Calculan</h1>
+                <span class="logo-icon">👐</span>
+            </div>
+            
+            <div class="child-figure" id="right-child">
+                <div>👧</div>
+            </div>
+        </div>
+        
+        <p class="subtitle">Explora un ambiente inclusivo y disfruta los recursos que hemos preparado para ti</p>
+        
+        <!-- Barra de búsqueda en el borde inferior derecho del header -->
+        <div class="search-container">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="search-input" placeholder="Buscar actividad...">
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <aside class="sidebar">
+            <div class="categories">
+                <h2>Categorías</h2>
+                <div class="category-list-container">
+                    <ul class="category-list">
+                        <li class="category-item">
+                            <a href="#" class="category-btn active" data-category="coleccion">
+                                <span>📚</span> Colección
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-btn" data-category="diversion">
+                                <span>🎉</span> Diversión
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-btn" data-category="herramientas">
+                                <span>🛠️</span> Herramientas
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-btn" data-category="numeros-z">
+                                <span class="math-symbol math-z">ℤ</span> 1ro - Números Z
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-btn" data-category="numeros-r">
+                                <span class="math-symbol math-r">ℝ</span> 2do - Números R
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-btn" data-category="algebra">
+                                <span class="math-symbol math-algebra">𝑥</span> 3ro - Álgebra
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-btn" data-category="geometria">
+                                <span class="math-symbol math-geometry">△</span> 4to - Geometría
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-btn" data-category="conicas">
+                                <span class="math-symbol math-conics">⎔</span> 5to - Cónicas
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-btn" data-category="calculo">
+                                <span class="math-symbol math-calc">∫</span> 6to - Cálculo
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <div class="empty-state" id="default-content">
+                <p>📚 Todas las actividades se mostrarán aquí</p>
+                <p>Selecciona una categoría del menú para filtrar las actividades</p>
+                <p><small>Próximamente añadiremos actividades para cada categoría</small></p>
+            </div>
+            
+            <div class="category-content" id="coleccion-content">
+                <h2>📚 Actividades de Colección</h2>
+                <p>Aquí encontrarás todas las actividades de recopilación y organización.</p>
+                <p><small>Contenido en desarrollo</small></p>
+            </div>
+            
+            <div class="category-content" id="diversion-content">
+                <h2>🎉 Actividades Divertidas</h2>
+                <p>Juegos y actividades lúdicas para aprender matemáticas.</p>
+                <p><small>Contenido en desarrollo</small></p>
+            </div>
+            
+            <div class="category-content" id="herramientas-content">
+                <h2>🛠️ Herramientas Matemáticas</h2>
+                <p>Utilidades y recursos para apoyar tu aprendizaje.</p>
+                <p><small>Contenido en desarrollo</small></p>
+            </div>
+            
+            <div class="activities-grid" style="display: none;">
+                <!-- Las actividades se agregarán aquí posteriormente -->
+            </div>
+        </main>
+    </div>
+    
+    <footer>
+        <p>Instituto para Sordos Santa Rosa, Inc.</p>
+        <p>© 2025 - Desarrollado por Miguel Ubiera</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            const defaultContent = document.getElementById('default-content');
+            const categoryContents = document.querySelectorAll('.category-content');
+            const searchInput = document.getElementById('search-input');
+            const leftChild = document.getElementById('left-child');
+            const rightChild = document.getElementById('right-child');
+            const leftEmoji = leftChild.querySelector('div');
+            const rightEmoji = rightChild.querySelector('div');
+            
+            // Inicialización: aparecer lentamente al cargar la página
+            leftEmoji.style.animation = 'fadeInSlow 15s ease-out forwards';
+            rightEmoji.style.animation = 'fadeInSlow 15s ease-out forwards';
+            
+            // Función para el ciclo completo de desaparecer y aparecer (30 segundos total)
+            function cycleChildren() {
+                // Desaparecer lentamente durante 15 segundos — SUAVE
+                leftEmoji.style.animation = 'fadeOutSlow 15s ease-in forwards';
+                rightEmoji.style.animation = 'fadeOutSlow 15s ease-in forwards';
+                
+                setTimeout(() => {
+                    // Intercambiar los emojis cuando han desaparecido completamente
+                    const leftHtml = leftChild.innerHTML;
+                    const rightHtml = rightChild.innerHTML;
+                    
+                    leftChild.innerHTML = rightHtml;
+                    rightChild.innerHTML = leftHtml;
+                    
+                    // Obtener los nuevos emojis
+                    const newLeftEmoji = leftChild.querySelector('div');
+                    const newRightEmoji = rightChild.querySelector('div');
+                    
+                    // Reaparecer lentamente durante 15 segundos
+                    newLeftEmoji.style.animation = 'fadeInSlow 15s ease-out forwards';
+                    newRightEmoji.style.animation = 'fadeInSlow 15s ease-out forwards';
+                    
+                }, 15000); // Esperar 15 segundos (duración de fadeOutSlow)
+            }
+            
+            // Iniciar el ciclo cada 30 segundos (15s desaparecer + 15s aparecer)
+            setInterval(cycleChildren, 30000);
+            
+            // Manejo de categorías
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remover clase active de todos los botones
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Añadir clase active al botón clickeado
+                    this.classList.add('active');
+                    
+                    // Ocultar contenido por defecto
+                    defaultContent.style.display = 'none';
+                    
+                    // Ocultar todos los contenidos de categoría
+                    categoryContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Mostrar el contenido correspondiente a la categoría seleccionada
+                    const category = this.getAttribute('data-category');
+                    const contentToShow = document.getElementById(`${category}-content`);
+                    
+                    if (contentToShow) {
+                        contentToShow.classList.add('active');
+                    } else {
+                        // Si no hay contenido específico, mostrar el contenido por defecto
+                        defaultContent.style.display = 'block';
+                    }
+                });
+            });
+            
+            // Funcionalidad de búsqueda
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                // Aquí se implementará la lógica de búsqueda cuando se agreguen actividades
+                console.log('Buscando:', searchTerm);
+                // En el futuro, esto filtrará las actividades mostradas
+            });
+        });
+    </script>
+</body>
+</html>
