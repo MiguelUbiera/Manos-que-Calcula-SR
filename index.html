@@ -3,8 +3,9 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instituto para Sordos Santa Rosa, Inc. - Actividades Matemáticas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=0.9">
+    <title>Manos que Calculan - Actividades Matemáticas</title>
+    <link rel="icon" type="image/png" href="favicon.png">
     <style>
         :root {
             --primary: #3f51b5;
@@ -29,88 +30,61 @@
             position: relative;
             overflow-x: hidden;
             min-height: 100vh;
-            padding-bottom: 0; /* Eliminado padding fijo */
         }
 
-        /* Animaciones globales */
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
         }
 
         @keyframes floatElement {
-            0%, 100% {
-                transform: translate(0, 0) rotate(0deg);
-                opacity: 0.1;
-            }
-            25% {
-                transform: translate(20px, -15px) rotate(5deg);
-                opacity: 0.15;
-            }
-            50% {
-                transform: translate(-15px, 10px) rotate(-5deg);
-                opacity: 0.12;
-            }
-            75% {
-                transform: translate(10px, 20px) rotate(3deg);
-                opacity: 0.15;
-            }
+            0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.1; }
+            25% { transform: translate(20px, -15px) rotate(5deg); opacity: 0.15; }
+            50% { transform: translate(-15px, 10px) rotate(-5deg); opacity: 0.12; }
+            to { transform: translate(10px, 20px) rotate(3deg); opacity: 0.15; }
         }
 
         @keyframes fadeInRight {
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         @keyframes fadeInUp {
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         @keyframes ripple {
-            0% {
-                transform: scale(0, 0);
-                opacity: 1;
-            }
-            20% {
-                transform: scale(25, 25);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(50, 50);
-                opacity: 0;
-            }
+            0% { transform: scale(0, 0); opacity: 1; }
+            20% { transform: scale(25, 25); opacity: 1; }
+            to { transform: scale(50, 50); opacity: 0; }
         }
 
-        /* Animación lenta para desaparecer (15 segundos) - SUAVE */
         @keyframes fadeOutSlow {
-            0% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(5px) scale(0.98); /* Más sutil */
-            }
+            0% { opacity: 1; transform: scale(1) translateY(0); }
+            to { opacity: 0; transform: scale(0.9) translateY(5px); }
         }
 
-        /* Animación lenta para aparecer (15 segundos) */
         @keyframes fadeInSlow {
-            0% {
-                opacity: 0;
-                transform: translateY(5px) scale(0.98);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: scale(0.9) translateY(5px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        /* Elementos flotantes de fondo */
+        @keyframes gentle-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        @keyframes levitate {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-8px) rotate(1deg); }
+            50% { transform: translateY(-4px) rotate(-1deg); }
+            75% { transform: translateY(-6px) rotate(0.5deg); }
+        }
+
+        @keyframes smoothFadeIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
         .floating-element {
             position: fixed;
             font-size: 2.5rem;
@@ -120,10 +94,20 @@
             animation: floatElement 18s infinite ease-in-out;
         }
 
+        .header-floating-element {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.15;
+            z-index: 1;
+            pointer-events: none;
+            animation: floatElement 15s infinite ease-in-out;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
         header {
             background: linear-gradient(135deg, var(--primary), var(--accent));
             color: white;
-            padding: 0.8rem;
+            padding: 0.5rem;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             position: relative;
@@ -140,94 +124,57 @@
             width: 100%;
             max-width: 1200px;
             position: relative;
-            gap: 1rem;
         }
 
         .child-figure {
-            font-size: 2.5rem;
+            font-size: 2rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             transition: none;
+            min-width: 50px;
+            min-height: 50px;
+            user-select: none;
+        }
+
+        .child-figure div {
+            transition: opacity 0.5s, transform 0.5s;
         }
 
         .logo {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 1rem;
-            margin-bottom: 0.4rem;
+            gap: 0.8rem;
+            margin-bottom: 0.2rem;
+            flex-wrap: wrap;
         }
 
         .logo-icon {
-            font-size: 2rem;
+            font-size: 1.6rem;
             animation: pulse 2s infinite;
         }
 
         h1 {
-            font-size: 1.8rem;
-            margin-bottom: 0.3rem;
+            font-size: 1.5rem;
+            margin-bottom: 0.1rem;
             text-align: center;
         }
 
         .subtitle {
-            font-size: 1rem;
+            font-size: 0.85rem;
             opacity: 0.9;
             max-width: 800px;
             margin: 0 auto;
             text-align: center;
             position: relative;
-        }
-
-        /* Barra de búsqueda en el borde inferior derecho del header */
-        .search-container {
-            position: absolute;
-            bottom: 0;
-            right: 10rem; /* Desplazado hacia la izquierda */
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            margin-top: 0.5rem;
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.5); /* Más transparente y sutil */
-            border-radius: 20px;
-            padding: 0.4rem 0.6rem;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.3); /* Borde más sutil */
-            width: 150px;
-            min-height: 32px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); /* Sombra más ligera */
-        }
-
-        .search-box input {
-            background: transparent;
-            border: none;
-            color: var(--dark);
-            padding: 0.3rem 0.2rem;
-            font-size: 0.85rem;
-            outline: none;
-            width: 100%;
-        }
-
-        .search-box input::placeholder {
-            color: rgba(0, 0, 0, 0.5);
-            font-size: 0.85rem;
-        }
-
-        .search-icon {
-            margin-right: 0.3rem;
-            font-size: 0.9rem;
-            color: var(--dark);
+            line-height: 1.3;
         }
 
         .container {
             display: flex;
             max-width: 1200px;
-            margin: 1rem auto;
+            margin: 0.3rem auto;
             gap: 2rem;
             padding: 0 1rem;
             position: relative;
@@ -240,10 +187,12 @@
             border-radius: 10px;
             padding: 1rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            height: 75vh;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
             display: flex;
             flex-direction: column;
+            margin-top: 0;
+            height: fit-content;
+            min-height: 500px;
         }
 
         .sidebar:hover {
@@ -255,7 +204,6 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
         }
 
         .categories h2 {
@@ -269,26 +217,6 @@
 
         .category-list-container {
             flex: 1;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-
-        .category-list-container::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .category-list-container::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        .category-list-container::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 10px;
-        }
-
-        .category-list-container::-webkit-scrollbar-thumb:hover {
-            background: #303f9f;
         }
 
         .category-list {
@@ -310,8 +238,6 @@
         .category-item:nth-child(6) { animation-delay: 0.6s; }
         .category-item:nth-child(7) { animation-delay: 0.7s; }
         .category-item:nth-child(8) { animation-delay: 0.8s; }
-        .category-item:nth-child(9) { animation-delay: 0.9s; }
-        .category-item:nth-child(10) { animation-delay: 1.0s; }
 
         .category-btn {
             display: flex;
@@ -342,6 +268,7 @@
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
             transition: left 0.5s;
+            z-index: 1;
         }
 
         .category-btn:hover::before {
@@ -363,22 +290,74 @@
             font-weight: bold;
             font-size: 1.1em;
         }
-        
+
         .math-z { color: #FF5722; }
         .math-r { color: #2196F3; }
-        .math-algebra { color: #E91E63; }
-        .math-geometry { color: #4CAF50; }
-        .math-conics { color: #8E24AA; }
+        .math-x { color: #E91E63; }
+        .math-geo { color: #4CAF50; }
+        .math-conic { color: #9C27B0; }
         .math-calc { color: #FF9800; }
+
+        /* TRANSICIÓN DE NÚMEROS ENTEROS */
+        .number-transition {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid var(--light);
+        }
+
+        .number-transition-title {
+            font-size: 0.75rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .number-display {
+            font-size: 2.5rem;
+            font-weight: bold;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Courier New', monospace;
+            transition: all 0.5s ease;
+        }
+
+        .number-negative {
+            color: #e57373;
+            text-shadow: 2px 2px 4px rgba(229, 115, 115, 0.3);
+        }
+
+        .number-zero {
+            color: #212121;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .number-positive {
+            color: #3f51b5;
+            text-shadow: 2px 2px 4px rgba(63, 81, 181, 0.3);
+        }
+
+        .number-sign {
+            font-size: 1.2rem;
+            vertical-align: super;
+            margin-right: 0.2rem;
+            opacity: 0.7;
+        }
 
         .main-content {
             flex: 1;
+            position: relative;
         }
 
         .activities-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.2rem;
         }
 
         .activity-card {
@@ -488,7 +467,7 @@
             background: rgba(255, 255, 255, 0.5);
             opacity: 0;
             border-radius: 100%;
-            transform: scale(1, 1) translate(-50%);
+            transform: scale(1, 1) translate(-50);
             transform-origin: 50% 50%;
         }
 
@@ -508,15 +487,15 @@
 
         footer {
             text-align: center;
-            padding: 1.2rem 1rem;
+            padding: 1rem;
             background: var(--dark);
             color: white;
-            /* position: fixed; ← ELIMINADO */
+            position: relative;
             width: 100%;
-            z-index: 1;
-            box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
-            font-size: 0.9rem;
-            margin-top: 3rem; /* Para que quede después del contenido */
+            z-index: 1000;
+            height: auto;
+            min-height: 60px;
+            margin-top: 2rem;
         }
 
         .empty-state {
@@ -527,124 +506,699 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
 
-        .empty-state p {
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 1.5rem;
-        }
-
         .category-content {
             display: none;
             text-align: center;
-            padding: 2rem;
+            padding: 1rem;
             background: white;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            
         }
 
         .category-content.active {
             display: block;
         }
 
+        .category-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            color: var(--primary);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light);
+            text-align: center;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+            padding: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            animation: gentle-float 4s infinite ease-in-out;
+        }
+
+        .tool-card:hover {
+            animation-play-state: paused;
+            transform: translateY(-4px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        .tools-grid .tool-card:nth-child(1) { animation-delay: 0s; }
+        .tools-grid .tool-card:nth-child(2) { animation-delay: 0.3s; }
+        .tools-grid .tool-card:nth-child(3) { animation-delay: 0.6s; }
+        .tools-grid .tool-card:nth-child(4) { animation-delay: 0.9s; }
+        .tools-grid .tool-card:nth-child(5) { animation-delay: 1.2s; }
+        .tools-grid .tool-card:nth-child(6) { animation-delay: 1.5s; }
+        .tools-grid .tool-card:nth-child(7) { animation-delay: 1.8s; }
+        .tools-grid .tool-card:nth-child(8) { animation-delay: 2.1s; }
+        .tools-grid .tool-card:nth-child(9) { animation-delay: 2.4s; }
+        .tools-grid .tool-card:nth-child(10) { animation-delay: 2.7s; }
+        .tools-grid .tool-card:nth-child(11) { animation-delay: 3.0s; }
+        .tools-grid .tool-card:nth-child(12) { animation-delay: 3.3s; }
+        .tools-grid .tool-card:nth-child(13) { animation-delay: 3.6s; }
+        .tools-grid .tool-card:nth-child(14) { animation-delay: 3.9s; }
+        .tools-grid .tool-card:nth-child(15) { animation-delay: 4.2s; }
+
+
+        .tool-icon {
+            font-size: 2rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .tool-name {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--dark);
+        }
+
+        .modules-overview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .modules-row {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .modules-row.top {
+            justify-content: space-between;
+            padding: 0 3rem;
+        }
+
+        .modules-row.middle {
+            justify-content: center;
+            margin: 0.3rem 0;
+        }
+
+        .modules-row.bottom {
+            justify-content: space-between;
+            padding: 0 3rem;
+        }
+
+        .module-card {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+            padding: 0.8rem 0.6rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            position: relative;
+            width: 130px;
+            min-height: 85px;
+            animation: levitate 4s infinite ease-in-out;
+        }
+
+        .modules-row.top .module-card:nth-child(1) { animation-delay: 0s; }
+        .modules-row.top .module-card:nth-child(2) { animation-delay: 0.5s; }
+        .modules-row.middle .module-card { animation-delay: 1s; }
+        .modules-row.bottom .module-card:nth-child(1) { animation-delay: 1.5s; }
+        .modules-row.bottom .module-card:nth-child(2) { animation-delay: 2s; }
+
+        .module-card:hover {
+            transform: translateY(-8px) scale(1.08);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+            animation-play-state: paused;
+        }
+
+        .module-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .module-title {
+            font-weight: 600;
+            font-size: 0.8rem;
+            line-height: 1.1;
+        }
+
+        .module-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .module-card:hover::after {
+            left: 100%;
+        }
+
+        .module-detail {
+            display: none;
+            opacity: 0;
+            text-align: center;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: opacity 0.4s ease;
+            
+        }
+
+        .module-detail.active {
+            display: block;
+            opacity: 1;
+            animation: smoothFadeIn 0.5s ease forwards;
+        }
+
+        .back-arrow {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            background: rgba(63, 81, 181, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            color: var(--primary);
+            z-index: 10;
+        }
+
+        .back-arrow:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .module-header {
+            background: linear-gradient(135deg, rgba(63, 81, 181, 0.9), rgba(0, 188, 212, 0.9));
+            color: white;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+            min-width: 200px;
+        }
+
+        .module-header h3 {
+            font-size: 1.1rem;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .games-grid {
+            margin-top: 1rem;
+        }
+
+        .search-container-inline {
+            margin: 0.5rem 0 1rem 0;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .search-box-inline {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 20px;
+            padding: 0.4rem 0.8rem;
+            border: 2px solid var(--primary);
+            width: 70%;
+            max-width: 400px;
+            min-height: 38px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .search-box-inline:focus-within {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+
+        .search-box-inline input {
+            background: transparent;
+            border: none;
+            color: var(--dark);
+            padding: 0.2rem 0.4rem;
+            font-size: 0.9rem;
+            outline: none;
+            width: 100%;
+        }
+
+        .search-box-inline input::placeholder {
+            color: rgba(0, 0, 0, 0.5);
+            font-size: 0.85rem;
+        }
+
+        .search-icon-inline {
+            margin-right: 0.4rem;
+            font-size: 1rem;
+            color: var(--primary);
+        }
+
+        .search-results-container {
+            margin-top: 0.5rem;
+        }
+
+        .search-results-title {
+            font-size: 1rem;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.3rem;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .no-results {
+            color: #666;
+            font-style: italic;
+            padding: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .search-active .category-title,
+        .search-active .modules-overview,
+        .search-active .tools-grid:not(.search-results-grid) {
+            display: none !important;
+        }
+
+        /* ESTILOS PARA LAS TARJETAS DE CREADORES */
+        .creators-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .creator-card {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            position: relative;
+            width: 130px;
+            min-height: 85px;
+            animation: levitate 4s infinite ease-in-out;
+            text-decoration: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .creator-card:nth-child(1) { animation-delay: 0s; }
+        .creator-card:nth-child(2) { animation-delay: 0.5s; }
+
+        .creator-card:hover {
+            transform: translateY(-8px) scale(1.08);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+            animation-play-state: paused;
+        }
+
+        .creator-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .creator-card:hover::after {
+            left: 100%;
+        }
+
+        .creator-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 0.5rem;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .creator-name {
+            font-weight: 600;
+            font-size: 0.8rem;
+            line-height: 1.1;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* VISOR DE ACTIVIDADES - SIN BARRA SUPERIOR */
+        .activity-viewer {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 9999;
+            flex-direction: column;
+        }
+
+        .activity-viewer.active {
+            display: flex;
+        }
+
+        .activity-viewer-content {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-viewer-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* BOTÓN FLOTANTE PARA VOLVER */
+        .floating-back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: 3px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-100px);
+        }
+
+        .floating-back-btn.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .floating-back-btn:hover {
+            transform: scale(1.1) translateX(0);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        .floating-back-btn:active {
+            transform: scale(0.95) translateX(0);
+        }
+
+        .floating-back-btn::before {
+            content: '←';
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        /* Indicador de carga */
+        .loading-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .loading-indicator.visible {
+            opacity: 1;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(63, 81, 181, 0.1);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Modo pantalla completa - oculta sidebar y expande main */
+        body.fullscreen-mode .sidebar {
+            display: none;
+        }
+
+        body.fullscreen-mode .container {
+            max-width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        body.fullscreen-mode .main-content {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        body.fullscreen-mode header,
+        body.fullscreen-mode footer {
+            display: none;
+        }
+
+        body.fullscreen-mode {
+            padding: 0;
+            overflow: hidden;
+        }
+
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
             }
-            
+
             .sidebar {
                 flex: 1;
                 width: 100%;
                 height: auto;
                 margin-bottom: 1rem;
+                min-height: auto;
             }
-            
-            .category-list-container {
-                overflow-y: visible;
-                max-height: none;
+
+            .number-transition {
+                margin-top: 1rem;
             }
-            
+
             .activities-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             }
-            
-            .floating-element {
+
+            .tools-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+
+            .modules-overview {
+                max-width: 100%;
+            }
+
+            .module-card {
+                width: 110px;
+                min-height: 75px;
+                padding: 0.6rem 0.5rem;
+            }
+
+            .module-number {
+                font-size: 1.6rem;
+            }
+
+            .module-title {
+                font-size: 0.75rem;
+            }
+
+            .modules-row.top,
+            .modules-row.bottom {
+                padding: 0 1.5rem;
+            }
+
+            .floating-element, .header-floating-element {
                 display: none;
             }
-            
+
             .header-content {
                 flex-direction: column;
                 gap: 1rem;
             }
-            
+
             .child-figure {
-                font-size: 2rem;
-            }
-            
-            .logo-icon {
                 font-size: 1.8rem;
             }
-            
-            .search-container {
-                position: relative;
-                bottom: auto;
-                right: auto;
-                transform: none;
-                margin: 1rem auto;
-                display: block;
+
+            .logo-icon {
+                font-size: 1.4rem;
             }
-            
+
+            h1 {
+                font-size: 1.3rem;
+            }
+
+            .subtitle {
+                font-size: 0.8rem;
+            }
+
+            .search-box-inline {
+                width: 85%;
+                max-width: none;
+            }
+
             footer {
                 position: relative;
-                margin-top: 3rem;
+                height: auto;
+            }
+
+            body {
+                padding-bottom: 0;
+            }
+
+            .category-content,
+            .module-detail {
+                margin-bottom: 0;
+            }
+
+            /* Responsive para tarjetas de creadores */
+            .creators-container {
+                gap: 1rem;
+            }
+
+            .creator-card {
+                width: 110px;
+                min-height: 75px;
+                padding: 0.8rem;
+            }
+
+            .creator-image {
+                width: 50px;
+                height: 50px;
+            }
+
+            .creator-name {
+                font-size: 0.75rem;
+            }
+
+            /* Botón flotante responsive */
+            .floating-back-btn {
+                width: 45px;
+                height: 45px;
+                top: 15px;
+                left: 15px;
+            }
+
+            .floating-back-btn::before {
+                font-size: 1.3rem;
             }
         }
     </style>
+<base target="_blank">
 </head>
 <body>
-    <!-- Elementos matemáticos flotantes en el fondo -->
-    <div class="floating-element" style="top: 10%; left: 5%; animation-delay: 0s;">📐</div>
-    <div class="floating-element" style="top: 20%; right: 8%; animation-delay: 2s;">📏</div>
-    <div class="floating-element" style="top: 30%; left: 12%; animation-delay: 4s;">🔺</div>
-    <div class="floating-element" style="top: 40%; right: 15%; animation-delay: 6s;">🔷</div>
-    <div class="floating-element" style="top: 50%; left: 7%; animation-delay: 8s;">⭕</div>
-    <div class="floating-element" style="top: 60%; right: 5%; animation-delay: 10s;">📊</div>
-    <div class="floating-element" style="top: 70%; left: 15%; animation-delay: 12s;">🧮</div>
-    <div class="floating-element" style="top: 80%; right: 12%; animation-delay: 14s;">✏️</div>
-    <div class="floating-element" style="top: 25%; left: 25%; animation-delay: 1s;">👐</div>
-    <div class="floating-element" style="top: 45%; right: 25%; animation-delay: 3s;">👐</div>
-    <div class="floating-element" style="top: 65%; left: 35%; animation-delay: 5s;">👐</div>
-    <div class="floating-element" style="top: 35%; right: 35%; animation-delay: 7s;">👐</div>
-    <div class="floating-element" style="top: 55%; left: 45%; animation-delay: 9s;">👐</div>
-    <div class="floating-element" style="top: 75%; right: 45%; animation-delay: 11s;">👐</div>
-    
+    <div class="floating-element" style="top: 5%; left: 3%; animation-delay: 0s;">📐</div>
+    <div class="floating-element" style="top: 15%; right: 5%; animation-delay: 1s;">📏</div>
+    <div class="floating-element" style="top: 25%; left: 8%; animation-delay: 2s;">🔺</div>
+    <div class="floating-element" style="top: 35%; right: 10%; animation-delay: 3s;">🔷</div>
+    <div class="floating-element" style="top: 45%; left: 5%; animation-delay: 4s;">⭕</div>
+    <div class="floating-element" style="top: 55%; right: 7%; animation-delay: 5s;">📊</div>
+    <div class="floating-element" style="top: 65%; left: 12%; animation-delay: 6s;">🧮</div>
+    <div class="floating-element" style="top: 75%; right: 9%; animation-delay: 7s;">✏️</div>
+    <div class="floating-element" style="top: 20%; left: 20%; animation-delay: 0.5s;">👐</div>
+    <div class="floating-element" style="top: 40%; right: 22%; animation-delay: 1.5s;">👐</div>
+    <div class="floating-element" style="top: 60%; left: 30%; animation-delay: 2.5s;">👐</div>
+    <div class="floating-element" style="top: 30%; right: 32%; animation-delay: 3.5s;">👐</div>
+    <div class="floating-element" style="top: 50%; left: 40%; animation-delay: 4.5s;">👐</div>
+    <div class="floating-element" style="top: 70%; right: 42%; animation-delay: 5.5s;">👐</div>
+    <div class="floating-element" style="top: 10%; right: 25%; animation-delay: 6.5s;">➕</div>
+    <div class="floating-element" style="top: 80%; left: 25%; animation-delay: 7.5s;">➗</div>
+    <div class="floating-element" style="top: 35%; left: 75%; animation-delay: 0.8s;">🔢</div>
+    <div class="floating-element" style="top: 65%; right: 75%; animation-delay: 1.8s;">➖</div>
+
     <header>
+        <div class="header-floating-element" style="top: 20%; left: 10%; animation-delay: 0s;">👐</div>
+        <div class="header-floating-element" style="top: 60%; right: 15%; animation-delay: 2s;">👐</div>
+        <div class="header-floating-element" style="top: 40%; left: 20%; animation-delay: 4s;">👐</div>
+        <div class="header-floating-element" style="top: 30%; right: 25%; animation-delay: 1s;">👐</div>
+        <div class="header-floating-element" style="top: 70%; left: 30%; animation-delay: 3s;">👐</div>
+        <div class="header-floating-element" style="top: 50%; right: 35%; animation-delay: 5s;">👐</div>
+
         <div class="header-content">
             <div class="child-figure" id="left-child">
                 <div>👦</div>
             </div>
-            
+
             <div class="logo">
                 <span class="logo-icon">👐</span>
                 <h1>Manos que Calculan</h1>
                 <span class="logo-icon">👐</span>
             </div>
-            
+
             <div class="child-figure" id="right-child">
                 <div>👧</div>
             </div>
         </div>
-        
+
         <p class="subtitle">Explora un ambiente inclusivo y disfruta los recursos que hemos preparado para ti</p>
-        
-        <!-- Barra de búsqueda en el borde inferior derecho del header -->
-        <div class="search-container">
-            <div class="search-box">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="search-input" placeholder="Buscar actividad...">
-            </div>
-        </div>
     </header>
-    
+
     <div class="container">
         <aside class="sidebar">
             <div class="categories">
@@ -667,77 +1221,180 @@
                             </a>
                         </li>
                         <li class="category-item">
-                            <a href="#" class="category-btn" data-category="numeros-z">
+                            <a href="#" class="category-btn" data-category="primero">
                                 <span class="math-symbol math-z">ℤ</span> 1ro - Números Z
                             </a>
                         </li>
                         <li class="category-item">
-                            <a href="#" class="category-btn" data-category="numeros-r">
+                            <a href="#" class="category-btn" data-category="segundo">
                                 <span class="math-symbol math-r">ℝ</span> 2do - Números R
                             </a>
                         </li>
                         <li class="category-item">
-                            <a href="#" class="category-btn" data-category="algebra">
-                                <span class="math-symbol math-algebra">𝑥</span> 3ro - Álgebra
+                            <a href="#" class="category-btn" data-category="tercero">
+                                <span class="math-symbol math-x">x</span> 3ro - Álgebra
                             </a>
                         </li>
                         <li class="category-item">
-                            <a href="#" class="category-btn" data-category="geometria">
-                                <span class="math-symbol math-geometry">△</span> 4to - Geometría
+                            <a href="#" class="category-btn" data-category="cuarto">
+                                <span class="math-symbol math-geo">△</span> 4to - Geometría
                             </a>
                         </li>
                         <li class="category-item">
-                            <a href="#" class="category-btn" data-category="conicas">
-                                <span class="math-symbol math-conics">⎔</span> 5to - Cónicas
+                            <a href="#" class="category-btn" data-category="quinto">
+                                <span class="math-symbol math-conic">○</span> 5to - Cónicas
                             </a>
                         </li>
                         <li class="category-item">
-                            <a href="#" class="category-btn" data-category="calculo">
+                            <a href="#" class="category-btn" data-category="sexto">
                                 <span class="math-symbol math-calc">∫</span> 6to - Cálculo
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-btn" data-category="creador">
+                                <span>👤</span> Creador
                             </a>
                         </li>
                     </ul>
                 </div>
             </div>
+
+            <div class="number-transition">
+                <div class="number-transition-title">Números Enteros</div>
+                <div class="number-display" id="number-display">
+                    <span class="number-sign">-</span>3
+                </div>
+            </div>
         </aside>
-        
-        <main class="main-content">
+
+        <main class="main-content" id="main-content">
             <div class="empty-state" id="default-content">
-                <p>📚 Todas las actividades se mostrarán aquí</p>
-                <p>Selecciona una categoría del menú para filtrar las actividades</p>
-                <p><small>Próximamente añadiremos actividades para cada categoría</small></p>
+                <p>📚 Todos los recursos se mostrarán aquí</p>
+                <p>Selecciona una categoría del menú para filtrar los recursos</p>
+                <p><small>Próximamente añadiremos recursos para cada categoría</small></p>
             </div>
-            
+
             <div class="category-content" id="coleccion-content">
-                <h2>📚 Actividades de Colección</h2>
-                <p>Aquí encontrarás todas las actividades de recopilación y organización.</p>
-                <p><small>Contenido en desarrollo</small></p>
+                <div class="search-container-inline">
+                    <div class="search-box-inline">
+                        <span class="search-icon-inline">🔍</span>
+                        <input type="text" id="search-input" placeholder="Buscar recursos..." autocomplete="off">
+                    </div>
+                </div>
+
+                <div id="search-results-container" class="search-results-container" style="display: none;">
+                    <div class="search-results-title">🔍 Resultados de búsqueda</div>
+                    <div id="search-results-grid" class="tools-grid search-results-grid"></div>
+                </div>
             </div>
-            
+
             <div class="category-content" id="diversion-content">
-                <h2>🎉 Actividades Divertidas</h2>
-                <p>Juegos y actividades lúdicas para aprender matemáticas.</p>
-                <p><small>Contenido en desarrollo</small></p>
+                <h2 class="category-title">🎉 Actividades Divertidas</h2>
+                <div class="tools-grid" id="diversion-grid">
+                    <!-- Vacío - se irán agregando actividades posteriormente -->
+                </div>
             </div>
-            
+
             <div class="category-content" id="herramientas-content">
-                <h2>🛠️ Herramientas Matemáticas</h2>
-                <p>Utilidades y recursos para apoyar tu aprendizaje.</p>
-                <p><small>Contenido en desarrollo</small></p>
+                <h2 class="category-title">🛠️ Herramientas Matemáticas</h2>
+                <div class="tools-grid" id="herramientas-grid">
+                    <!-- Vacío - se irán agregando herramientas posteriormente -->
+                </div>
             </div>
-            
+
+            <div class="category-content" id="primero-content">
+                <h2 class="category-title">ℤ 1ro - Números Enteros</h2>
+                <div class="tools-grid" id="primero-grid">
+                    <!-- Vacío - se irán agregando recursos posteriormente -->
+                </div>
+            </div>
+
+            <div class="category-content" id="segundo-content">
+                <h2 class="category-title">ℝ 2do - Números Reales</h2>
+                <div class="tools-grid" id="segundo-grid">
+                    <!-- Vacío - se irán agregando recursos posteriormente -->
+                </div>
+            </div>
+
+            <div class="category-content" id="tercero-content">
+                <h2 class="category-title">x 3ro - Álgebra</h2>
+                <div class="tools-grid" id="tercero-grid">
+                    <!-- Vacío - se irán agregando recursos posteriormente -->
+                </div>
+            </div>
+
+            <div class="category-content" id="cuarto-content">
+                <h2 class="category-title">△ 4to - Geometría</h2>
+                <div class="tools-grid" id="cuarto-grid">
+                    <!-- Vacío - se irán agregando recursos posteriormente -->
+                </div>
+            </div>
+
+            <div class="category-content" id="quinto-content">
+                <h2 class="category-title">○ 5to - Cónicas</h2>
+                <div class="tools-grid" id="quinto-grid">
+                    <!-- Vacío - se irán agregando recursos posteriormente -->
+                </div>
+            </div>
+
+            <div class="category-content" id="sexto-content">
+                <h2 class="category-title">∫ 6to - Cálculo</h2>
+                <div class="tools-grid" id="sexto-grid">
+                    <!-- Vacío - se irán agregando recursos posteriormente -->
+                </div>
+            </div>
+
+            <div class="category-content" id="creador-content">
+                <h2 class="category-title">👤 Creador</h2>
+                <div class="creators-container">
+                    <button class="creator-card" onclick="loadActivity('Miguel.html', 'Miguel Ubiera')">
+                        <img src="Miguel.png" alt="Miguel Ubiera" class="creator-image" onerror="this.style.display='none'; this.nextElementSibling.style.marginTop='10px';">
+                        <div class="creator-name">Miguel Ubiera</div>
+                    </button>
+                </div>
+            </div>
+
             <div class="activities-grid" style="display: none;">
-                <!-- Las actividades se agregarán aquí posteriormente -->
-            </div>
+                </div>
         </main>
     </div>
-    
+
+    <!-- VISOR DE ACTIVIDADES - SIN BARRA SUPERIOR -->
+    <div id="activity-viewer" class="activity-viewer">
+        <div class="activity-viewer-content">
+            <div class="loading-indicator" id="loading-indicator">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">Cargando...</div>
+            </div>
+            <iframe id="activity-iframe" src=""></iframe>
+        </div>
+    </div>
+
+    <!-- BOTÓN FLOTANTE PARA VOLVER -->
+    <button id="floating-back-btn" class="floating-back-btn" onclick="closeActivity()" title="Volver al menú"></button>
+
     <footer>
-        <p>Instituto para Sordos Santa Rosa, Inc.</p>
         <p>© 2025 - Desarrollado por Miguel Ubiera</p>
     </footer>
 
     <script>
+        const allActivities = [
+            // Array vacío - se irán agregando actividades posteriormente
+        ];
+
+        const numberSequence = [
+            { value: '-3', sign: '-', class: 'number-negative' },
+            { value: '-2', sign: '-', class: 'number-negative' },
+            { value: '-1', sign: '-', class: 'number-negative' },
+            { value: '0', sign: '', class: 'number-zero' },
+            { value: '1', sign: '+', class: 'number-positive' },
+            { value: '2', sign: '+', class: 'number-positive' },
+            { value: '3', sign: '+', class: 'number-positive' }
+        ];
+
+        // Variables para el visor de actividades
+        let currentActivityFile = null;
+
         document.addEventListener('DOMContentLoaded', function() {
             const categoryButtons = document.querySelectorAll('.category-btn');
             const defaultContent = document.getElementById('default-content');
@@ -745,79 +1402,167 @@
             const searchInput = document.getElementById('search-input');
             const leftChild = document.getElementById('left-child');
             const rightChild = document.getElementById('right-child');
+            const searchResultsContainer = document.getElementById('search-results-container');
+            const searchResultsGrid = document.getElementById('search-results-grid');
+            const coleccionContent = document.getElementById('coleccion-content');
+            const numberDisplay = document.getElementById('number-display');
+
             const leftEmoji = leftChild.querySelector('div');
             const rightEmoji = rightChild.querySelector('div');
-            
-            // Inicialización: aparecer lentamente al cargar la página
-            leftEmoji.style.animation = 'fadeInSlow 15s ease-out forwards';
-            rightEmoji.style.animation = 'fadeInSlow 15s ease-out forwards';
-            
-            // Función para el ciclo completo de desaparecer y aparecer (30 segundos total)
-            function cycleChildren() {
-                // Desaparecer lentamente durante 15 segundos — SUAVE
-                leftEmoji.style.animation = 'fadeOutSlow 15s ease-in forwards';
-                rightEmoji.style.animation = 'fadeOutSlow 15s ease-in forwards';
-                
+
+            leftEmoji.style.animation = 'fadeInSlow 3s ease-out forwards';
+            rightEmoji.style.animation = 'fadeInSlow 3s ease-out forwards';
+
+            function toggleChildren() {
+                leftEmoji.style.animation = 'fadeOutSlow 3s ease-in forwards';
+                rightEmoji.style.animation = 'fadeOutSlow 3s ease-in forwards';
+
                 setTimeout(() => {
-                    // Intercambiar los emojis cuando han desaparecido completamente
-                    const leftHtml = leftChild.innerHTML;
-                    const rightHtml = rightChild.innerHTML;
-                    
-                    leftChild.innerHTML = rightHtml;
-                    rightChild.innerHTML = leftHtml;
-                    
-                    // Obtener los nuevos emojis
-                    const newLeftEmoji = leftChild.querySelector('div');
-                    const newRightEmoji = rightChild.querySelector('div');
-                    
-                    // Reaparecer lentamente durante 15 segundos
-                    newLeftEmoji.style.animation = 'fadeInSlow 15s ease-out forwards';
-                    newRightEmoji.style.animation = 'fadeInSlow 15s ease-out forwards';
-                    
-                }, 15000); // Esperar 15 segundos (duración de fadeOutSlow)
+                    if (leftEmoji.textContent === '👦') {
+                        leftEmoji.textContent = '👧';
+                        rightEmoji.textContent = '👦';
+                    } else {
+                        leftEmoji.textContent = '👦';
+                        rightEmoji.textContent = '👧';
+                    }
+
+                    leftEmoji.style.animation = 'fadeInSlow 3s ease-out forwards';
+                    rightEmoji.style.animation = 'fadeInSlow 3s ease-out forwards';
+
+                }, 3000);
             }
-            
-            // Iniciar el ciclo cada 30 segundos (15s desaparecer + 15s aparecer)
-            setInterval(cycleChildren, 30000);
-            
-            // Manejo de categorías
+
+            setInterval(toggleChildren, 10000);
+
+            let currentNumberIndex = 0;
+
+            function updateNumber() {
+                const num = numberSequence[currentNumberIndex];
+                numberDisplay.innerHTML = num.sign ? `<span class="number-sign">${num.sign}</span>${num.value.replace('-', '').replace('+', '')}` : num.value;
+                numberDisplay.className = `number-display ${num.class}`;
+
+                currentNumberIndex = (currentNumberIndex + 1) % numberSequence.length;
+            }
+
+            setInterval(updateNumber, 2000);
+
+            function performSearch(searchTerm) {
+                if (!searchTerm || searchTerm.trim() === '') {
+                    searchResultsContainer.style.display = 'none';
+                    coleccionContent.classList.remove('search-active');
+                    return;
+                }
+
+                const term = searchTerm.toLowerCase().trim();
+
+                const filtered = allActivities.filter(activity => 
+                    activity.name.toLowerCase().includes(term)
+                );
+
+                filtered.sort((a, b) => a.name.localeCompare(b.name));
+
+                if (filtered.length > 0) {
+                    searchResultsGrid.innerHTML = filtered.map(activity => `
+                        <div class="tool-card" onclick="${activity.file ? `loadActivity('${activity.file}', '${activity.name}')` : ''}">
+                            <div class="tool-icon">${activity.icon}</div>
+                            <div class="tool-name">${activity.name}</div>
+                        </div>
+                    `).join('');
+                } else {
+                    searchResultsGrid.innerHTML = '<p class="no-results">No se encontraron actividades que coincidan con tu búsqueda.</p>';
+                }
+
+                searchResultsContainer.style.display = 'block';
+                coleccionContent.classList.add('search-active');
+            }
+
+            searchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value;
+                performSearch(searchTerm);
+            });
+
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                }
+            });
+
             categoryButtons.forEach(button => {
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
-                    
-                    // Remover clase active de todos los botones
+
                     categoryButtons.forEach(btn => btn.classList.remove('active'));
-                    
-                    // Añadir clase active al botón clickeado
+
                     this.classList.add('active');
-                    
-                    // Ocultar contenido por defecto
+
                     defaultContent.style.display = 'none';
-                    
-                    // Ocultar todos los contenidos de categoría
-                    categoryContents.forEach(content => content.classList.remove('active'));
-                    
-                    // Mostrar el contenido correspondiente a la categoría seleccionada
+
+                    categoryContents.forEach(content => {
+                        content.classList.remove('active');
+                        content.classList.remove('search-active');
+                    });
+
+                    searchInput.value = '';
+                    searchResultsContainer.style.display = 'none';
+
                     const category = this.getAttribute('data-category');
-                    const contentToShow = document.getElementById(`${category}-content`);
-                    
-                    if (contentToShow) {
-                        contentToShow.classList.add('active');
-                    } else {
-                        // Si no hay contenido específico, mostrar el contenido por defecto
-                        defaultContent.style.display = 'block';
+                    const targetContent = document.getElementById(`${category}-content`);
+
+                    if (targetContent) {
+                        targetContent.classList.add('active');
                     }
                 });
             });
+
+            document.querySelector('.category-btn[data-category="coleccion"]').click();
+        });
+
+        // FUNCIONES PARA CARGAR ACTIVIDADES - VENTANA EMERGENTE SIN BARRA SUPERIOR
+        function loadActivity(file, title) {
+            if (!file) {
+                alert('Esta actividad estará disponible próximamente.');
+                return;
+            }
+
+            const viewer = document.getElementById('activity-viewer');
+            const iframe = document.getElementById('activity-iframe');
+            const backBtn = document.getElementById('floating-back-btn');
+
+            currentActivityFile = file;
+            iframe.src = file;
             
-            // Funcionalidad de búsqueda
-            searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                
-                // Aquí se implementará la lógica de búsqueda cuando se agreguen actividades
-                console.log('Buscando:', searchTerm);
-                // En el futuro, esto filtrará las actividades mostradas
-            });
+            viewer.classList.add('active');
+            document.body.classList.add('fullscreen-mode');
+            
+            // Mostrar el botón flotante con animación
+            setTimeout(() => {
+                backBtn.classList.add('visible');
+            }, 100);
+        }
+
+        function closeActivity() {
+            const viewer = document.getElementById('activity-viewer');
+            const iframe = document.getElementById('activity-iframe');
+            const backBtn = document.getElementById('floating-back-btn');
+
+            // Ocultar el botón flotante primero
+            backBtn.classList.remove('visible');
+            
+            viewer.classList.remove('active');
+            document.body.classList.remove('fullscreen-mode');
+            
+            // Limpiar el iframe para detener la actividad
+            setTimeout(() => {
+                iframe.src = '';
+                currentActivityFile = null;
+            }, 300);
+        }
+
+        // Cerrar con tecla Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.body.classList.contains('fullscreen-mode')) {
+                closeActivity();
+            }
         });
     </script>
 </body>
